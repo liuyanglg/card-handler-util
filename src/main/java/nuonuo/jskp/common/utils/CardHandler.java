@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  *2018/2/1
  */
 public class CardHandler {
-    public static char[] specialChars = {'\\', '\'','"'};
+    public static char[] specialChars = {'\\', '\'', '"'};
 
     /**
      * 添加企业名片接口
@@ -33,7 +33,14 @@ public class CardHandler {
      * @return
      */
     public static String addCard(Card card) {
+        CardResponse response = new CardResponse();
 
+        if(card!=null){
+            if(StringUtils.isBlank(card.getTaxid())){
+                response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+            }
+        }
+        String url = "";
         return null;
     }
 
@@ -42,88 +49,95 @@ public class CardHandler {
         response.setCode(String.valueOf(ErrorConstants.SUCCESS));
 
         if (card == null) {
-            response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
+            response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
             response.setMessage("企业名片不能为空！");
             return response;
         }
 
-        StringBuilder message = new StringBuilder("");
         if (card != null) {
-           if (!StringUtils.isEmpty(card.getTaxid())) {
+            if (!StringUtils.isEmpty(card.getTaxid())) {
                 if (CardValidator.checkCompanyTaxid(card.getTaxid()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("taxid长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("taxid长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getName())) {
+            if (!StringUtils.isEmpty(card.getName())) {
                 if (CardValidator.checkCompanyName(card.getName()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("name长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("name长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getAddress())) {
+            if (!StringUtils.isEmpty(card.getAddress())) {
                 if (CardValidator.checkCompanyAddress(card.getAddress()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("address长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("address长度不合法！");
+                    return response;
                 }
             }
 
 
-           if (!StringUtils.isEmpty(card.getTelephone())) {
+            if (!StringUtils.isEmpty(card.getTelephone())) {
                 if (CardValidator.checkCompanyTelephone(card.getTelephone()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("telephone长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("telephone长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getBank())) {
+            if (!StringUtils.isEmpty(card.getBank())) {
                 if (CardValidator.checkCompanyBank(card.getBank()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("bank长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("bank长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getAccount())) {
+            if (!StringUtils.isEmpty(card.getAccount())) {
                 if (CardValidator.checkCompanyAccount(card.getAccount()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("account长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("account长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getType())) {
+            if (!StringUtils.isEmpty(card.getType())) {
                 if (CardValidator.checkCompanyType(card.getType()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("type长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("type长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getCert())) {
+            if (!StringUtils.isEmpty(card.getCert())) {
                 if (CardValidator.checkCompanyCert(card.getCert()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("cert长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("cert长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getSource())) {
+            if (!StringUtils.isEmpty(card.getSource())) {
                 if (CardValidator.checkCompanySource(card.getSource()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("source长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("source长度不合法！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getStatus())) {
+            if (!StringUtils.isEmpty(card.getStatus())) {
                 if (CardValidator.checkCompanyStatus(card.getStatus()) != ErrorConstants.CHECK_OK) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("status长度不合法！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("status长度不合法！");
+                    return response;
                 }
             }
 
-            if(!StringUtils.isEmpty(message)){
-                response.setMessage(message.toString());
-            }
         }
+
         return response;
     }
 
@@ -132,87 +146,94 @@ public class CardHandler {
         response.setCode(String.valueOf(ErrorConstants.SUCCESS));
 
         if (card == null) {
-            response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
+            response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
             response.setMessage("企业名片不能为空！");
             return response;
         }
 
         StringBuilder message = new StringBuilder("");
         if (card != null) {
-           if (!StringUtils.isEmpty(card.getTaxid())) {
+            if (!StringUtils.isEmpty(card.getTaxid())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getTaxid())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("taxid不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("taxid不能含有乱码！");
+                    return response;
                 }
             }
 
-           if (!StringUtils.isEmpty(card.getName())) {
+            if (!StringUtils.isEmpty(card.getName())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getName())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("name不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("name不能含有乱码！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getAddress())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getAddress())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("address不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("address不能含有乱码！");
+                    return response;
                 }
             }
 
 
             if (!StringUtils.isEmpty(card.getTelephone())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getTelephone())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("telephone不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("telephone不能含有乱码！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getBank())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getBank())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("bank不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("bank不能含有乱码！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getAccount())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getAccount())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("account不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("account不能含有乱码！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getType())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getType())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("type不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("type不能含有乱码！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getCert())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getCert())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("cert不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("cert不能含有乱码！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getSource())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getSource())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("source不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("source不能含有乱码！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getStatus())) {
                 if (nuonuo.jskp.common.utils.StringUtils.isMessyCode(card.getStatus())) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("status不能含有乱码！");
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("status不能含有乱码！");
+                    return response;
                 }
             }
 
-            if(!StringUtils.isEmpty(message)){
-                response.setMessage(message.toString());
-            }
         }
         return response;
     }
@@ -222,90 +243,94 @@ public class CardHandler {
         response.setCode(String.valueOf(ErrorConstants.SUCCESS));
 
         if (card == null) {
-            response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
+            response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
             response.setMessage("企业名片不能为空！");
             return response;
         }
 
-        String specialString = outputSpecialChars(specialChars);
-        System.out.println("special: "+specialString);
-        StringBuilder message = new StringBuilder("");
+//        String specialString = outputSpecialChars(specialChars);
         if (card != null) {
             if (!StringUtils.isEmpty(card.getTaxid())) {
-                if (isContainSpecialChar(card.getTaxid(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("taxid不能含有特殊字符！");
+                if (isContainSpecialChar(card.getTaxid(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("taxid不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getName())) {
-                if (isContainSpecialChar(card.getName(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("name不能含有特殊字符！");
+                if (isContainSpecialChar(card.getName(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("name不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getAddress())) {
-                if (isContainSpecialChar(card.getAddress(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("address不能含有特殊字符！");
+                if (isContainSpecialChar(card.getAddress(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("address不能含有特殊字符！");
+                    return response;
                 }
             }
 
 
             if (!StringUtils.isEmpty(card.getTelephone())) {
-                if (isContainSpecialChar(card.getTelephone(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("telephone不能含有特殊字符！");
+                if (isContainSpecialChar(card.getTelephone(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("telephone不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getBank())) {
-                if (isContainSpecialChar(card.getBank(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("bank不能含有特殊字符！");
+                if (isContainSpecialChar(card.getBank(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("bank不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getAccount())) {
-                if (isContainSpecialChar(card.getAccount(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("account不能含有特殊字符！");
+                if (isContainSpecialChar(card.getAccount(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("account不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getType())) {
-                if (isContainSpecialChar(card.getType(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("type不能含有特殊字符！");
+                if (isContainSpecialChar(card.getType(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("type不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getCert())) {
-                if (isContainSpecialChar(card.getCert(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("cert不能含有特殊字符！");
+                if (isContainSpecialChar(card.getCert(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("cert不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getSource())) {
-                if (isContainSpecialChar(card.getSource(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("source不能含有特殊字符！");
+                if (isContainSpecialChar(card.getSource(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("source不能含有特殊字符！");
+                    return response;
                 }
             }
 
             if (!StringUtils.isEmpty(card.getStatus())) {
-                if (isContainSpecialChar(card.getStatus(),specialChars)) {
-                    response.setCode(String.valueOf(ErrorConstants.CHECK_FAIL));
-                    message.append("status不能含有特殊字符！");
+                if (isContainSpecialChar(card.getStatus(), specialChars)) {
+                    response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                    response.setMessage("status不能含有特殊字符！");
+                    return response;
                 }
             }
 
-            if(!StringUtils.isEmpty(message)){
-                message.append("(特殊字符：" + specialString + ")");
-                response.setMessage(message.toString());
-            }
         }
         return response;
     }
@@ -327,17 +352,17 @@ public class CardHandler {
         return b;
     }
 
-    public static String outputSpecialChars(char[] specialChars){
+    public static String outputSpecialChars(char[] specialChars) {
         if (specialChars == null || specialChars.length < 0) {
             return null;
         }
 
         StringBuilder builder = new StringBuilder("");
-        for (char c:specialChars){
-            builder.append(c+",");
+        for (char c : specialChars) {
+            builder.append(c + ",");
         }
 
-        if(builder.length()>0){
+        if (builder.length() > 0) {
             builder.deleteCharAt(builder.length() - 1);
         }
         return builder.toString();

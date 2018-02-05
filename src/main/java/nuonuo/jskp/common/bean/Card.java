@@ -107,18 +107,46 @@ public class Card {
 
     @Override
     public String toString() {
-        return "Card{" +
-                "code='" + code + '\'' +
-                ", taxid='" + taxid + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", bank='" + bank + '\'' +
-                ", account='" + account + '\'' +
-                ", type='" + type + '\'' +
-                ", cert='" + cert + '\'' +
-                ", source='" + source + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+        StringBuilder builder = new StringBuilder("{");
+        int len = builder.length();
+        if (code != null && code.trim().length() > 0) {
+            builder.append("\"code\":\"" + code +"\",");
+        }
+        if (taxid != null && taxid.trim().length() > 0) {
+            builder.append("\"taxid\":\"" + taxid +"\",");
+        }
+        if (name != null && name.trim().length() > 0) {
+            builder.append("\"name\":\"" + name +"\",");
+        }
+        if (address != null && address.trim().length() > 0) {
+            builder.append("\"address\":\"" + address +"\",");
+        }
+        if (telephone != null && telephone.trim().length() > 0) {
+            builder.append("\"telephone\":\"" + telephone +"\",");
+        }
+        if (bank != null && bank.trim().length() > 0) {
+            builder.append("\"bank\":\"" + bank +"\",");
+        }
+        if (account != null && account.trim().length() > 0) {
+            builder.append("\"account\":\"" + account +"\",");
+        }
+        if (type != null && type.trim().length() > 0) {
+            builder.append("\"type\":\"" + type +"\",");
+        }
+        if (cert != null && cert.trim().length() > 0) {
+            builder.append("\"cert\":\"" + cert +"\",");
+        }
+        if (source != null && source.trim().length() > 0) {
+            builder.append("\"source\":\"" + source +"\",");
+        }
+        if (status != null && status.trim().length() > 0) {
+            builder.append("\"status\":\"" + status +"\",");
+        }
+        if (builder.length() > len) {
+            builder.deleteCharAt(builder.length() - 1);
+        }
+
+        builder.append("}");
+        return builder.toString();
     }
 }

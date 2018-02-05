@@ -19,4 +19,7 @@ public class ErrorConstants {
 
     /*成功*/
     public static final int SUCCESS = 200;
+
+    /*请求内容有误*/
+    public static final int CHECK_BAD_REQUEST = 400;
 }
