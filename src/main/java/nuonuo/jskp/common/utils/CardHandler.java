@@ -1,9 +1,19 @@
 package nuonuo.jskp.common.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import nuonuo.jskp.common.bean.Card;
 import nuonuo.jskp.common.bean.CardResponse;
 import nuonuo.jskp.common.constants.ErrorConstants;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
 
 /**
  *Created by  liuya
@@ -14,7 +24,7 @@ public class CardHandler {
 
     /**
      * 添加企业名片接口
-     * @param card
+     * @param json
      * cardJson请求参数格式
      * {
      *     "code": "六位代码",
@@ -32,16 +42,59 @@ public class CardHandler {
      * }
      * @return
      */
-    public static String addCard(Card card) {
+    public static String addCard(String url, String json) throws Exception {
+        String result = null;
+        Card card = JSON.parseObject(json, new TypeReference<Card>() {
+        });
+
+        result = addCard(url, card);
+        return result;
+    }
+
+    public static String addCard(String url, Card card) throws IOException {
+        String apiSuffix = "/v1/cards";
+        String result = null;
+
+        CardResponse cardResponse = addCardValid(card);
+        if (Integer.parseInt(cardResponse.getCode()) != ErrorConstants.SUCCESS) {
+            return JSON.toJSONString(cardResponse);
+        }
+
+        url = url.trim() + apiSuffix;
+        CloseableHttpClient httpClient = null;
+
+        httpClient = HttpClients.createDefault();
+        HttpPost post = new HttpPost(url);
+        post.addHeader("Content-type", "application/json");
+        HttpResponse response = httpClient.execute(post);
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            result = EntityUtils.toString(entity);
+        }
+        return result;
+    }
+
+    public static CardResponse addCardValid(Card card) {
         CardResponse response = new CardResponse();
 
-        if(card!=null){
-            if(StringUtils.isBlank(card.getTaxid())){
+        if (card != null) {
+            if (StringUtils.isBlank(card.getTaxid()) || StringUtils.isBlank(card.getName())) {
                 response.setCode(String.valueOf(ErrorConstants.CHECK_BAD_REQUEST));
+                response.setMessage("企业名称或税号不能为空");
             }
         }
-        String url = "";
-        return null;
+
+        if (Integer.parseInt(response.getCode()) == ErrorConstants.SUCCESS) {
+            response = CardHandler.checkLength(card);
+        }
+        if (Integer.parseInt(response.getCode()) == ErrorConstants.SUCCESS) {
+            response = CardHandler.checkMessyCode(card);
+        }
+        if (Integer.parseInt(response.getCode()) == ErrorConstants.SUCCESS) {
+            response = CardHandler.checkSpecialChar(card);
+        }
+
+        return response;
     }
 
     public static CardResponse checkLength(Card card) {
